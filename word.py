@@ -8,12 +8,16 @@ class Word(pg.sprite.Sprite):
 
         self.char_group = pg.sprite.Group()
         for i in range(1, len_+1):
-            self.char_group.add(Square(word_num, i))
+            x_ = (i)*70 + 90
+            y_ = (word_num)*70 + 90
+            self.char_group.add(Square(x_, y_, "", (0, 0, 60, 60), 50))
 
         self.char_list = []
         self.word = ""
         self.isComplete = False
         self.inProgress = False
+
+        self.isCorrect = False
 
         self.neutral_background = (252, 252, 252)
         self.neutral_border = (200, 200, 200)
@@ -26,7 +30,7 @@ class Word(pg.sprite.Sprite):
     def set_in_progress(self):
         self.inProgress = True
         for char in self.char_group:
-            char.change_colours(border=self.progress_border)
+            char.set_border_colour(self.progress_border)
         return
 
     def check_complete(self):
@@ -39,20 +43,23 @@ class Word(pg.sprite.Sprite):
         if self.check_complete():
             self.isComplete = True
             self.inProgress = False
-            for n, char in enumerate(self.char_group):
-                new_colour = self.get_complete_char_colour(char.char, n, goal_word)
-                char.change_colours(border=new_colour, background=new_colour)
+            self.set_complete_char_colour(goal_word)
         return
 
-    def get_complete_char_colour(self, char, index, goal_word):
+    def set_complete_char_colour(self, goal_word):
 
-        if char in goal_word:
-            if goal_word[index] == char:
-                return self.correct_background
+        for index, char in enumerate(self.char_group):
+
+            if char.char in goal_word:
+                if goal_word[index] == char.char:
+                    new_colour = self.correct_background
+                else:
+                    new_colour = self.partial_background
             else:
-                return self.partial_background
-        else:
-            return self.neutral_border
+                new_colour = self.neutral_border
+
+            char.set_border_colour(new_colour)
+            char.set_background_colour(new_colour)
 
     def update_word(self):
         self.char_list = [sqr.char for sqr in self.char_group]
@@ -82,11 +89,8 @@ class Word(pg.sprite.Sprite):
     def check_match(self, goal_word:str):
 
         if goal_word.strip().upper() == self.word.upper().strip():
-            print("Word is a match!")
-            return True
-        else:
-            print("word is not a match!")
-            return False
+            self.isCorrect = True
+        return
 
     def update(self):
         self.update_word()

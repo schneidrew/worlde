@@ -1,16 +1,28 @@
 import pygame as pg
 from sys import exit
 from word import Word
+from Keyboard import Keyboard
 from random import choice
 
+word_len = 5
+num_tries = 7
 
 legal_words = set()
-with open('word_list')as word_file:
+with open('word_data/word_list') as word_file:
     for word in word_file:
-        legal_words.add(word.strip().upper())
+        word = word.strip().upper()
+        if len(word) == word_len:
+            legal_words.add(word)
 
-legal_words = set(word for word in legal_words if len(word)==5)
-goal_word = choice(tuple(legal_words))
+answer_words = set()
+with open('word_data/answer_list') as answer_file:
+    for word in answer_file:
+        word = word.strip().upper()
+        if len(word) == word_len:
+            answer_words.add(word)
+
+goal_word = choice(tuple(answer_words))
+print(goal_word)
 
 game_active = True
 
@@ -20,15 +32,16 @@ screen.fill((252,250,252))
 pg.display.set_caption("Wordle-Copy")
 clock = pg.time.Clock()
 
-word_len = 5
 
 word_group = pg.sprite.Group()
-for i in range(1,7):
+for i in range(1,num_tries):
     word_group.add(Word(i, word_len))
 
 for word_ in word_group:
     word_.draw_word(screen)
 
+kb = Keyboard()
+kb.draw_keyboard(screen)
 
 def set_next_in_progress(w_group):
     for w in w_group:
@@ -40,10 +53,10 @@ def set_next_in_progress(w_group):
 
 def check_game_active(w_group):
     for w in w_group:
-        if not w.isComplete:
-            return True
-
-    return False
+        if w.isComplete:
+            if w.isCorrect:
+                return False
+    return True
 
 set_next_in_progress(word_group)
 
@@ -75,8 +88,8 @@ while True:
                             if word_.check_complete():
                                 if word_.word in legal_words:
                                     word_.set_complete(goal_word)
-                                    word_.check_match(goal_word)
                                     set_next_in_progress(word_group)
+                                    word_.check_match(goal_word)
                                 else:
                                     print("Illegal Word")
                                 break

@@ -3,18 +3,17 @@ import pygame as pg
 
 class Square(pg.sprite.Sprite):
 
-    def __init__(self, guess:int, letter:int):
+    def __init__(self, x_:int, y_:int, char:str, dims:tuple, font_size:int):
         super().__init__()
 
-        self.font = pg.font.Font(None, 50)
-        self.dimension = 30
-        self.x = (letter)*70 + 90
-        self.y = (guess)*70 + 90
-        self.char = ""
+        self.font = pg.font.Font(None, font_size)
+        self.x = x_
+        self.y = y_
+        self.char = char
 
         self.image = self.font.render(self.char, False, (64, 64, 64))
         self.rect = self.image.get_rect(center=(self.x, self.y))
-        self.background = pg.Rect(0,0, 60, 60)
+        self.background = pg.Rect(*dims)
         self.background.center = (self.x, self.y)
 
         self.last_drawn = False
@@ -36,14 +35,11 @@ class Square(pg.sprite.Sprite):
 
         return
 
-    def change_colours(self, **kwargs):
-        for key, value in kwargs.items():
-            if key.upper().strip() == 'BORDER':
-                self.border_colour = value
-            elif key.upper().strip() == 'BACKGROUND':
-                self.background_colour = value
-            else:
-                print(f"no colour change could be made for {key}")
+    def set_border_colour(self, colour:tuple):
+        self.border_colour = colour
+
+    def set_background_colour(self, colour:tuple):
+        self.background_colour = colour
 
     def draw(self, surface):
 
