@@ -10,6 +10,7 @@ class Square(pg.sprite.Sprite):
         self.x = x_
         self.y = y_
         self.char = char
+        self.status = "neutral"
 
         self.image = self.font.render(self.char, False, (64, 64, 64))
         self.rect = self.image.get_rect(center=(self.x, self.y))
@@ -18,8 +19,40 @@ class Square(pg.sprite.Sprite):
 
         self.last_drawn = False
 
-        self.border_colour = (200, 200, 200)
-        self.background_colour = (252, 252, 252)
+        self.colours = {
+
+            "neutral": {
+                "order": 0,
+                "border": (200, 200, 200),
+                "background": (252, 252, 252)
+            },
+
+            "progress": {
+                "order": 1,
+                "border": (101, 157, 181),
+                "background": (252, 252, 252)
+            },
+
+            "incorrect": {
+                "order": 3,
+                "border": (200, 200, 200),
+                "background": (200, 200, 200)
+            },
+
+            "partial": {
+                "order": 2,
+                "border": (250, 222, 132),
+                "background": (250, 222, 132)
+            },
+
+            "correct": {
+                "order": 3,
+                "border": (145, 227, 179),
+                "background": (145, 227, 179)
+            }
+        }
+
+        self.set_colours_status()
 
         return
 
@@ -35,11 +68,27 @@ class Square(pg.sprite.Sprite):
 
         return
 
+    def set_status(self, status:str):
+        assert status in self.colours.keys(), f"Status must be in: {self.colours.keys()}"
+        if self.colours[status]['order'] > self.colours[self.status]['order']:
+            self.status = status
+            self.set_colours_status()
+
     def set_border_colour(self, colour:tuple):
         self.border_colour = colour
 
     def set_background_colour(self, colour:tuple):
         self.background_colour = colour
+
+    def set_colours_status(self):
+        self.border_colour = self.colours[self.status]['border']
+        self.background_colour = self.colours[self.status]['background']
+
+    def get_border_colour(self):
+        return self.border_colour
+
+    def get_background_colour(self):
+        return self.background_colour
 
     def draw(self, surface):
 

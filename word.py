@@ -8,9 +8,9 @@ class Word(pg.sprite.Sprite):
 
         self.char_group = pg.sprite.Group()
         for i in range(1, len_+1):
-            x_ = (i)*70 + 90
-            y_ = (word_num)*70 + 90
-            self.char_group.add(Square(x_, y_, "", (0, 0, 60, 60), 50))
+            x_ = i*70 + 90
+            y_ = word_num*70 + 90
+            self.char_group.add(Square(x_, y_, "", (0, 0, 60, 60), 40))
 
         self.char_list = []
         self.word = ""
@@ -19,18 +19,12 @@ class Word(pg.sprite.Sprite):
 
         self.isCorrect = False
 
-        self.neutral_background = (252, 252, 252)
-        self.neutral_border = (200, 200, 200)
-        self.progress_border = (101, 157, 181)
-        self.correct_background = (145, 227, 179)
-        self.partial_background = (250, 222, 132)
-
         return
 
     def set_in_progress(self):
         self.inProgress = True
         for char in self.char_group:
-            char.set_border_colour(self.progress_border)
+            char.set_status("progress")
         return
 
     def check_complete(self):
@@ -52,14 +46,11 @@ class Word(pg.sprite.Sprite):
 
             if char.char in goal_word:
                 if goal_word[index] == char.char:
-                    new_colour = self.correct_background
+                    char.set_status("correct")
                 else:
-                    new_colour = self.partial_background
+                    char.set_status("partial")
             else:
-                new_colour = self.neutral_border
-
-            char.set_border_colour(new_colour)
-            char.set_background_colour(new_colour)
+                char.set_status("incorrect")
 
     def update_word(self):
         self.char_list = [sqr.char for sqr in self.char_group]

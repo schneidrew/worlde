@@ -18,7 +18,7 @@ class Keyboard(pg.sprite.Sprite):
             for num, char_ in enumerate(group_):
                 x_ = 90 + num*self.dim + self.row_offsets[row]
                 y_ = 625 + row*self.dim
-                self.char_group.add(Square(x_, y_, char_, (0, 0, self.len, self.len), 30))
+                self.char_group.add(Square(x_, y_, char_, (0, 0, self.len, self.len), 24))
 
         self.neutral_background = (252, 252, 252)
         self.neutral_border = (200, 200, 200)
@@ -27,6 +27,21 @@ class Keyboard(pg.sprite.Sprite):
         self.partial_background = (250, 222, 132)
 
         return
+
+    def update_char_status(self, char_:str, new_status:str):
+        for char in self.char_group:
+            if char.char.upper() == char_.upper():
+                char.set_status(new_status)
+
+    def update_colours(self, guess:str, goal_word:str):
+        for index, char in enumerate(guess):
+            if char in goal_word:
+                if goal_word[index] == char:
+                    self.update_char_status(char, "correct")
+                else:
+                    self.update_char_status(char, "partial")
+            else:
+                self.update_char_status(char, "incorrect")
 
     def draw_keyboard(self, surface):
         for char in self.char_group:

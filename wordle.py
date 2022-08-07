@@ -90,6 +90,7 @@ while True:
                                     word_.set_complete(goal_word)
                                     set_next_in_progress(word_group)
                                     word_.check_match(goal_word)
+                                    kb.update_colours(word_.word, goal_word)
                                 else:
                                     print("Illegal Word")
                                 break
@@ -97,6 +98,8 @@ while True:
         word_group.update()
         for word_ in word_group:
             word_.draw_word(screen)
+
+        kb.draw_keyboard(screen)
 
         game_active = check_game_active(word_group)
 
