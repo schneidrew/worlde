@@ -3,6 +3,7 @@ from sys import exit
 from Word import Word
 from Keyboard import Keyboard
 from random import choice
+from PyDictionary import PyDictionary
 
 word_len = 5
 num_tries = 7
@@ -22,7 +23,8 @@ with open('word_data/answer_list') as answer_file:
             answer_words.add(word)
 
 goal_word = choice(tuple(answer_words))
-# print(goal_word)
+# dictionary=PyDictionary()
+# print(dictionary.meaning(goal_word))
 
 game_active = True
 

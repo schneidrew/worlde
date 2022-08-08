@@ -1,30 +1,50 @@
 
 
-def get_complete_colours(word:str, goal_word:str):
+def get_complete_colours(guess:str, goal_word:str):
 
-    assert len(word) == 5, "word must be 5 letters long"
-    assert len(goal_word) == 5, "goal word must be 5 letters long"
+    guess, goal_word = guess.strip().upper(), goal_word.strip().upper()
+    assert len(guess) == len(goal_word), "the two words must be of the same length"
 
-    col_list = [0,0,0,0,0]
-    for i, char in enumerate(word):
-        print(goal_word.count(char))
+    colours = ["neutral"]*len(guess)
 
-    return
+    char_dict = get_char_dict(guess, goal_word)
+
+    for char, dict_ in char_dict.items():
+        counter = 0
+        if not dict_['goal']:
+            for index in dict_['guess']:
+                colours[index] = 'incorrect'
+        else:
+            for index in dict_['guess']:
+                if index in dict_['goal']:
+                    colours[index] = 'correct'
+                    counter += 1
+                else:
+                    pass
+            for index in dict_['guess']:
+                if index not in dict_['goal']:
+                    if counter < len(dict_['goal']):
+                        colours[index] = 'partial'
+                        counter += 1
+                    else:
+                        colours[index] = 'incorrect'
+
+    assert "neutral" not in colours, "None of the colours can remain neutral"
+    return colours
 
 
-def word_to_dict(text:str):
-    text = text.upper()
-    temp_dict = {}
-    for char in text:
-        temp_dict[char] = [i for i, c in enumerate(text) if c == char]
-
-    return temp_dict
+def get_char_dict(guess:str, goal:str):
+    char_dict = {}
+    for i, char in enumerate(guess):
+        temp_dict = {}
+        temp_dict['guess'] = [i for i, c in enumerate(guess) if c == char]
+        temp_dict['goal'] = [i for i, c in enumerate(goal) if c == char]
+        char_dict[char] = temp_dict
+    return char_dict
 
 
 if __name__ == "__main__":
 
-    word = "masts"
-    goal_word = "sassy"
-    get_complete_colours(word, goal_word)
-    print(word_to_dict(word))
-    print(word_to_dict(goal_word))
+    guess = "syssa"
+    goal_word = "masty"
+    get_complete_colours(guess, goal_word)

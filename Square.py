@@ -103,12 +103,13 @@ class Square(pg.sprite.Sprite):
         else:
             print("current shake must finish")
 
-    def shake_update(self):
+    def shake_update(self, dir:int = 1):
+
         if self.shake_timer_pos > 0:
-            self.x += 2
+            self.x += 2*dir
             self.shake_timer_pos -= 1
         elif self.shake_time_neg > 0:
-            self.x -= 2
+            self.x -= 2*dir
             self.shake_time_neg -= 1
 
     def draw(self, surface):
@@ -117,8 +118,6 @@ class Square(pg.sprite.Sprite):
         self.background.center = (self.x, self.y)
         self.rect.center = (self.x, self.y)
 
-        # self.image = pg.transform.rotate(self.image, self.rotate)
-        # self.rotate +=0.01
         pg.draw.rect(surface, self.background_colour, self.background)
         pg.draw.rect(surface, self.border_colour, self.background, 2)
 

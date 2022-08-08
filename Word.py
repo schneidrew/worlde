@@ -1,5 +1,6 @@
 import pygame as pg
 from Square import Square
+from utils.complete_colours import get_complete_colours
 
 
 class Word(pg.sprite.Sprite):
@@ -42,15 +43,9 @@ class Word(pg.sprite.Sprite):
 
     def set_complete_char_colour(self, goal_word):
 
-        for index, char in enumerate(self.char_group):
-
-            if char.char in goal_word:
-                if goal_word[index] == char.char:
-                    char.set_status("correct")
-                else:
-                    char.set_status("partial")
-            else:
-                char.set_status("incorrect")
+        guess = "".join([char.char for char in self.char_group])
+        for char, status in zip(self.char_group, get_complete_colours(guess, goal_word)):
+            char.set_status(status)
 
     def update_word(self):
         self.char_list = [sqr.char for sqr in self.char_group]
