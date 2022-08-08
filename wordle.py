@@ -29,7 +29,7 @@ goal_word = choice(tuple(answer_words))
 game_active = True
 
 pg.init()
-screen = pg.display.set_mode((600, 800))
+screen = pg.display.set_mode((600, 850))
 screen.fill((252,250,252))
 pg.display.set_caption("Wordle-Copy")
 clock = pg.time.Clock()

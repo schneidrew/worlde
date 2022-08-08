@@ -10,7 +10,7 @@ class Word(pg.sprite.Sprite):
         self.char_group = pg.sprite.Group()
         for i in range(1, len_+1):
             x_ = i*70 + 90
-            y_ = word_num*70 + 90
+            y_ = word_num*70 + 140
             self.char_group.add(Square(x_, y_, "", (0, 0, 60, 60), 40))
 
         self.char_list = []

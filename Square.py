@@ -101,7 +101,7 @@ class Square(pg.sprite.Sprite):
             self.shake_timer_pos = time_
             self.shake_time_neg = time_
         else:
-            print("current shake must finish")
+            pass
 
     def shake_update(self, dir:int = 1):
 
