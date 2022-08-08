@@ -11,11 +11,15 @@ class Square(pg.sprite.Sprite):
         self.y = y_
         self.char = char
         self.status = "neutral"
+        self.rotate = 1
 
         self.image = self.font.render(self.char, False, (64, 64, 64))
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.background = pg.Rect(*dims)
         self.background.center = (self.x, self.y)
+
+        self.shake_timer_pos = 0
+        self.shake_time_neg = 0
 
         self.last_drawn = False
 
@@ -90,8 +94,31 @@ class Square(pg.sprite.Sprite):
     def get_background_colour(self):
         return self.background_colour
 
+    def set_shake_timer(self, time_:int):
+        assert time_ >= 0, f"Time variable must be greater than 0. Supplied value is: {time_}"
+
+        if (self.shake_timer_pos == 0) & (self.shake_time_neg == 0):
+            self.shake_timer_pos = time_
+            self.shake_time_neg = time_
+        else:
+            print("current shake must finish")
+
+    def shake_update(self):
+        if self.shake_timer_pos > 0:
+            self.x += 2
+            self.shake_timer_pos -= 1
+        elif self.shake_time_neg > 0:
+            self.x -= 2
+            self.shake_time_neg -= 1
+
     def draw(self, surface):
 
+        self.shake_update()
+        self.background.center = (self.x, self.y)
+        self.rect.center = (self.x, self.y)
+
+        # self.image = pg.transform.rotate(self.image, self.rotate)
+        # self.rotate +=0.01
         pg.draw.rect(surface, self.background_colour, self.background)
         pg.draw.rect(surface, self.border_colour, self.background, 2)
 

@@ -1,6 +1,5 @@
 import pygame as pg
-from square import Square
-
+from Square import Square
 
 
 class Keyboard(pg.sprite.Sprite):
@@ -19,12 +18,6 @@ class Keyboard(pg.sprite.Sprite):
                 x_ = 90 + num*self.dim + self.row_offsets[row]
                 y_ = 625 + row*self.dim
                 self.char_group.add(Square(x_, y_, char_, (0, 0, self.len, self.len), 24))
-
-        self.neutral_background = (252, 252, 252)
-        self.neutral_border = (200, 200, 200)
-        self.progress_border = (101, 157, 181)
-        self.correct_background = (145, 227, 179)
-        self.partial_background = (250, 222, 132)
 
         return
 

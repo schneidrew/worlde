@@ -1,6 +1,6 @@
 import pygame as pg
 from sys import exit
-from word import Word
+from Word import Word
 from Keyboard import Keyboard
 from random import choice
 
@@ -22,7 +22,7 @@ with open('word_data/answer_list') as answer_file:
             answer_words.add(word)
 
 goal_word = choice(tuple(answer_words))
-print(goal_word)
+# print(goal_word)
 
 game_active = True
 
@@ -65,6 +65,7 @@ while True:
     if game_active:
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                print(goal_word)
                 pg.quit()
                 exit()
 
@@ -92,9 +93,12 @@ while True:
                                     word_.check_match(goal_word)
                                     kb.update_colours(word_.word, goal_word)
                                 else:
-                                    print("Illegal Word")
+                                    word_.set_shake_time(3)
                                 break
+                            else:
+                                word_.set_shake_time(3)
 
+        screen.fill((252, 250, 252))
         word_group.update()
         for word_ in word_group:
             word_.draw_word(screen)

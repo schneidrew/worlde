@@ -1,5 +1,5 @@
 import pygame as pg
-from square import Square
+from Square import Square
 
 
 class Word(pg.sprite.Sprite):
@@ -71,6 +71,10 @@ class Word(pg.sprite.Sprite):
                 char.change_render("")
                 break
         return
+
+    def set_shake_time(self, time_):
+        for char in self.char_group:
+            char.set_shake_timer(time_)
 
     def draw_word(self, surface):
         for char in self.char_group:
